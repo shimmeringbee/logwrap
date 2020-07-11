@@ -1,8 +1,8 @@
 # Shimmering Bee: Log Wrap
 
-[![license](https://img.shields.io/github/license/shimmeringbee/logwarp.svg)](https://github.com/shimmeringbee/logwarp/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/shimmeringbee/logwrap.svg)](https://github.com/shimmeringbee/logwrap/blob/master/LICENSE)
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg)](https://github.com/RichardLitt/standard-readme)
-[![Actions Status](https://github.com/shimmeringbee/logwarp/workflows/test/badge.svg)](https://github.com/shimmeringbee/logwarp/actions)
+[![Actions Status](https://github.com/shimmeringbee/logwrap/workflows/test/badge.svg)](https://github.com/shimmeringbee/logwrap/actions)
 
 > Log wrapper providing syntactic sugar for structured logging, including context based persistent options and implementations
 > for common logging systems.
@@ -24,7 +24,7 @@
 Add an import and most IDEs will `go get` automatically, if it doesn't `go build` will fetch.
 
 ```go
-import "github.com/shimmeringbee/logwarp"
+import "github.com/shimmeringbee/logwrap"
 ```
 
 ## Usage
@@ -37,7 +37,7 @@ import "github.com/shimmeringbee/logwarp"
 
 ## Contributing
 
-Feel free to dive in! [Open an issue](https://github.com/shimmeringbee/logwarp/issues/new) or submit PRs.
+Feel free to dive in! [Open an issue](https://github.com/shimmeringbee/logwrap/issues/new) or submit PRs.
 
 All Shimmering Bee projects follow the [Contributor Covenant](https://shimmeringbee.io/docs/code_of_conduct/) Code of Conduct.
 
