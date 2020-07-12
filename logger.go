@@ -7,6 +7,12 @@ import (
 )
 
 // Impl is the interface for the actual implementation of logging to implement.
+//
+// The default recommendation is that implementations should not block during execution. The implementation should make
+// use of go concurrency techniques to remove blocking code from calling functions go routine.
+//
+// Should an implementation block by design (such as assured delivery of logs), this should be made explicitly clear in
+// any documentation.
 type Impl func(context.Context, Message)
 
 // LogLevel is the log level type.
