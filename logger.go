@@ -40,9 +40,10 @@ func init() {
 
 // Logger is the representation of a stream of logs, it should always be instantiated with `New`.
 type Logger struct {
-	impl     Impl
-	sequence *uint64
-	unique   uint64
+	impl      Impl
+	sequence  *uint64
+	unique    uint64
+	segmentId *uint64
 }
 
 // Option is an interface for a option a Log call can take, adding or modifying data on a Message.
@@ -65,5 +66,6 @@ type Message struct {
 // New constructs a new logger, taking the backend implement which will actually log.
 func New(i Impl) Logger {
 	var initialSequence uint64
-	return Logger{impl: i, sequence: &initialSequence, unique: atomic.AddUint64(loggerSequence, 1)}
+	var initialSegmentId uint64
+	return Logger{impl: i, sequence: &initialSequence, unique: atomic.AddUint64(loggerSequence, 1), segmentId: &initialSegmentId}
 }
