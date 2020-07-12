@@ -17,6 +17,10 @@ func (l Logger) Log(ctx context.Context, message string, options ...Option) {
 		Sequence:  atomic.AddUint64(l.sequence, 1),
 	}
 
+	for _, option := range l.options {
+		option(&outgoingMessage)
+	}
+
 	for _, option := range l.getOptionsFromContext(ctx) {
 		option(&outgoingMessage)
 	}

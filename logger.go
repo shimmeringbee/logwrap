@@ -77,6 +77,7 @@ type Logger struct {
 	sequence  *uint64
 	unique    uint64
 	segmentID *uint64
+	options   []Option
 }
 
 // Option is an interface for a option a Log call can take, adding or modifying data on a Message.
@@ -100,5 +101,17 @@ type Message struct {
 func New(i Impl) Logger {
 	var initialSequence uint64
 	var initialSegmentID uint64
-	return Logger{impl: i, sequence: &initialSequence, unique: atomic.AddUint64(loggerSequence, 1), segmentID: &initialSegmentID}
+	return Logger{
+		impl:      i,
+		sequence:  &initialSequence,
+		unique:    atomic.AddUint64(loggerSequence, 1),
+		segmentID: &initialSegmentID,
+		options:   []Option{},
+	}
+}
+
+// AddOptionsToLogger adds default options to the logger which do not vary by implementation, and are applied first
+// before any context or log specific messages.
+func (l *Logger) AddOptionsToLogger(options ...Option) {
+	l.options = append(l.options, options...)
 }

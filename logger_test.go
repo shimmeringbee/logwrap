@@ -30,3 +30,22 @@ func TestLogLevel_String(t *testing.T) {
 		assert.Equal(t, "UNKNOWN", LogLevel(math.MaxUint64).String())
 	})
 }
+
+func TestLogger_AddOptionsToLogger(t *testing.T) {
+	t.Run("log sends a message with options attached to the logger being executed", func(t *testing.T) {
+		mockImpl := MockImpl{}
+		mockImpl.On("Impl", mock.Anything, mock.Anything).Once()
+
+		expectedKey := "key"
+		expectedValue := "value"
+
+		logger := New(mockImpl.Impl)
+		logger.AddOptionsToLogger(Field(expectedKey, expectedValue))
+
+		logger.Log(context.Background(), "anything")
+		assert.True(t, mockImpl.AssertExpectations(t))
+
+		capturedMessage := mockImpl.Calls[0].Arguments.Get(1).(Message)
+		assert.Equal(t, expectedValue, capturedMessage.Fields[expectedKey])
+	})
+}
