@@ -12,6 +12,7 @@ type SourceLocation struct {
 	Line     int
 }
 
+// SourceTraceField is the name of the field that the SourceTrace option will place its data in.
 const SourceTraceField = "sourceTrace"
 const maximumInternalFrameDepth = 32
 const entrypointFunctionPrefix = "github.com/shimmeringbee/logwrap.Logger"

@@ -53,8 +53,8 @@ func TestLogger_Segment(t *testing.T) {
 		capturedMessage[0] = mockImpl.Calls[0].Arguments.Get(1).(Message)
 		capturedMessage[1] = mockImpl.Calls[1].Arguments.Get(1).(Message)
 
-		assert.Equal(t, uint64(1), capturedMessage[0].Fields[SegmentIdField])
-		assert.Equal(t, uint64(2), capturedMessage[1].Fields[SegmentIdField])
+		assert.Equal(t, uint64(1), capturedMessage[0].Fields[SegmentIDField])
+		assert.Equal(t, uint64(2), capturedMessage[1].Fields[SegmentIDField])
 	})
 
 	t.Run("segment created as child of another segment has the parents segment id", func(t *testing.T) {
@@ -69,10 +69,10 @@ func TestLogger_Segment(t *testing.T) {
 		capturedMessage[0] = mockImpl.Calls[0].Arguments.Get(1).(Message)
 		capturedMessage[1] = mockImpl.Calls[1].Arguments.Get(1).(Message)
 
-		assert.Equal(t, uint64(1), capturedMessage[0].Fields[SegmentIdField])
-		assert.Nil(t, capturedMessage[0].Fields[ParentSegmentIdField])
+		assert.Equal(t, uint64(1), capturedMessage[0].Fields[SegmentIDField])
+		assert.Nil(t, capturedMessage[0].Fields[ParentSegmentIDField])
 
-		assert.Equal(t, uint64(2), capturedMessage[1].Fields[SegmentIdField])
-		assert.Equal(t, uint64(1), capturedMessage[1].Fields[ParentSegmentIdField])
+		assert.Equal(t, uint64(2), capturedMessage[1].Fields[SegmentIDField])
+		assert.Equal(t, uint64(1), capturedMessage[1].Fields[ParentSegmentIDField])
 	})
 }

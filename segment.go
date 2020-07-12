@@ -5,17 +5,25 @@ import (
 	"sync/atomic"
 )
 
+// SegmentField is the name of the field which a segment will place the start and end markers in.
 const SegmentField = "segment"
-const SegmentIdField = "segmentId"
-const ParentSegmentIdField = "parentSegmentId"
 
+// SegmentIDField is the name of the field which contains the segment ID.
+const SegmentIDField = "segmentID"
+
+// ParentSegmentIDField is the name of the field which contains this segments parent ID.
+const ParentSegmentIDField = "parentSegmentID"
+
+// SegmentStartValue is the value placed in the SegmentField denoting the start of a segment.
 const SegmentStartValue = "start"
+
+// SegmentEndValue is the value placed in the SegmentField denoting the end of a segment.
 const SegmentEndValue = "end"
 
-const contextKeySegmentId = "_ShimmeringBeeLogSegmentId"
+const contextKeySegmentID = "_ShimmeringBeeLogSegmentID"
 
 // Segment is used to wrap a section of a program, this can be used to demonstrate a group of logs are related. Segments
-// can be nested and the `segmentId` and `parentSegmentId` fields can be used to reconstruct nested logs into a hierarchy.
+// can be nested and the `segmentID` and `parentSegmentId` fields can be used to reconstruct nested logs into a hierarchy.
 //
 // An expected use of Segment might be as follows:
 //  func submitToAPI(pctx context.Context) {
@@ -34,21 +42,21 @@ const contextKeySegmentId = "_ShimmeringBeeLogSegmentId"
 //  }
 //
 // This code would product log likes aproximately like:
-// * [INFO] api submission {"segment": "start", "segmentId": 1}
-// * [INFO] perpare api submission {"segment": "start", "segmentId": 2, "parentSegmentId": 1}
-// * [INFO] preparation results {"segmentId": 2, "parentSegmentId": 1, "request": <request object>}
-// * [INFO] perpare api submission {"segment": "end", "segmentId": 2, "parentSegmentId": 1}
-// * [INFO] api submission {"segment": "end", "segmentId": 1}
+// * [INFO] api submission {"segment": "start", "segmentID": 1}
+// * [INFO] perpare api submission {"segment": "start", "segmentID": 2, "parentSegmentId": 1}
+// * [INFO] preparation results {"segmentID": 2, "parentSegmentId": 1, "request": <request object>}
+// * [INFO] perpare api submission {"segment": "end", "segmentID": 2, "parentSegmentId": 1}
+// * [INFO] api submission {"segment": "end", "segmentID": 1}
 func (l Logger) Segment(pctx context.Context, message string, options ...Option) (context.Context, func()) {
-	if parentSegmentId, present := l.getSegmentIdFromContext(pctx); present {
-		options = append(options, Field(ParentSegmentIdField, parentSegmentId))
+	if parentSegmentID, present := l.getSegmentIDFromContext(pctx); present {
+		options = append(options, Field(ParentSegmentIDField, parentSegmentID))
 	}
 
-	segmentId := atomic.AddUint64(l.segmentId, 1)
-	options = append(options, Field(SegmentIdField, segmentId))
+	segmentID := atomic.AddUint64(l.segmentID, 1)
+	options = append(options, Field(SegmentIDField, segmentID))
 
 	ctx := l.AddOptionsToContext(pctx, options...)
-	ctx = context.WithValue(ctx, l.contextKey(contextKeySegmentId), segmentId)
+	ctx = context.WithValue(ctx, l.contextKey(contextKeySegmentID), segmentID)
 
 	l.Log(ctx, message, Field(SegmentField, SegmentStartValue))
 
@@ -57,10 +65,10 @@ func (l Logger) Segment(pctx context.Context, message string, options ...Option)
 	}
 }
 
-func (l Logger) getSegmentIdFromContext(ctx context.Context) (uint64, bool) {
-	if uncast := ctx.Value(l.contextKey(contextKeySegmentId)); uncast != nil {
-		if segmentId, ok := uncast.(uint64); ok {
-			return segmentId, true
+func (l Logger) getSegmentIDFromContext(ctx context.Context) (uint64, bool) {
+	if uncast := ctx.Value(l.contextKey(contextKeySegmentID)); uncast != nil {
+		if segmentID, ok := uncast.(uint64); ok {
+			return segmentID, true
 		}
 	}
 
