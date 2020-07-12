@@ -13,6 +13,7 @@ import (
 
 func Test_mapLogLevels(t *testing.T) {
 	t.Run("maps logwrap to logrus log levels", func(t *testing.T) {
+		assert.Equal(t, logrus.PanicLevel, mapLogLevels(logwrap.Panic))
 		assert.Equal(t, logrus.FatalLevel, mapLogLevels(logwrap.Fatal))
 		assert.Equal(t, logrus.ErrorLevel, mapLogLevels(logwrap.Error))
 		assert.Equal(t, logrus.WarnLevel, mapLogLevels(logwrap.Warn))

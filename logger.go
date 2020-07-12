@@ -13,15 +13,42 @@ import (
 //
 // Should an implementation block by design (such as assured delivery of logs), this should be made explicitly clear in
 // any documentation.
+//
+// Implementations should obey the semantics of Panic and Fatal levels, panic()ing and os.Exit(-1) respectively after
+// the log has been made.
 type Impl func(context.Context, Message)
 
 // LogLevel is the log level type.
 type LogLevel uint
 
+// String provides a text description of the level.
+func (l LogLevel) String() string {
+	switch l {
+	case Panic:
+		return "PANIC"
+	case Fatal:
+		return "FATAL"
+	case Error:
+		return "ERROR"
+	case Warn:
+		return "WARN"
+	case Info:
+		return "INFO"
+	case Debug:
+		return "DEBUG"
+	case Trace:
+		return "TRACE"
+	default:
+		return "UNKNOWN"
+	}
+}
+
 // Possible log levels that messages can be made against.
 const (
+	// Panic level, the error encountered immediately panics the application.
+	Panic LogLevel = iota
 	// Fatal level, a severe enough issue has occurred the the application can no longer continue.
-	Fatal LogLevel = iota
+	Fatal
 	// Error level, a severe issue has been encountered, but the application has recovered.
 	Error
 	// Warn level, an issue has occurred which has not caused a operational issue, but should not have happened.

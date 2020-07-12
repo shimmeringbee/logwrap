@@ -28,6 +28,12 @@ func (l Logger) Log(ctx context.Context, message string, options ...Option) {
 	l.impl(ctx, outgoingMessage)
 }
 
+// LogPanic calls Log while appending Level(Panic) as an option.
+func (l Logger) LogPanic(ctx context.Context, message string, options ...Option) {
+	options = append(options, Level(Panic))
+	l.Log(ctx, message, options...)
+}
+
 // LogFatal calls Log while appending Level(Fatal) as an option.
 func (l Logger) LogFatal(ctx context.Context, message string, options ...Option) {
 	options = append(options, Level(Fatal))

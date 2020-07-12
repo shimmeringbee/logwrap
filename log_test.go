@@ -64,6 +64,23 @@ func TestLogger_Log(t *testing.T) {
 	})
 }
 
+func TestLogger_LogPanic(t *testing.T) {
+	t.Run("log sends a message to the implementation with level of panic", func(t *testing.T) {
+		mockImpl := MockImpl{}
+		mockImpl.On("Impl", mock.Anything, mock.Anything).Once()
+
+		expectedLevel := Panic
+
+		logger := New(mockImpl.Impl)
+		logger.LogPanic(context.Background(), "message")
+
+		assert.True(t, mockImpl.AssertExpectations(t))
+
+		capturedMessage := mockImpl.Calls[0].Arguments.Get(1).(Message)
+		assert.Equal(t, expectedLevel, capturedMessage.Level)
+	})
+}
+
 func TestLogger_LogFatal(t *testing.T) {
 	t.Run("log sends a message to the implementation with level of fatal", func(t *testing.T) {
 		mockImpl := MockImpl{}

@@ -15,6 +15,8 @@ func Wrap(dest *realLogrus.Logger) logwrap.Impl {
 
 func mapLogLevels(level logwrap.LogLevel) realLogrus.Level {
 	switch level {
+	case logwrap.Panic:
+		return realLogrus.PanicLevel
 	case logwrap.Fatal:
 		return realLogrus.FatalLevel
 	case logwrap.Error:
