@@ -27,3 +27,39 @@ func (l Logger) Log(ctx context.Context, message string, options ...Option) {
 
 	l.impl(ctx, outgoingMessage)
 }
+
+// LogFatal calls Log while appending Level(Fatal) as an option.
+func (l Logger) LogFatal(ctx context.Context, message string, options ...Option) {
+	options = append(options, Level(Fatal))
+	l.Log(ctx, message, options...)
+}
+
+// LogError calls Log while appending Level(Error) as an option.
+func (l Logger) LogError(ctx context.Context, message string, options ...Option) {
+	options = append(options, Level(Error))
+	l.Log(ctx, message, options...)
+}
+
+// LogWarn calls Log while appending Level(Warn) as an option.
+func (l Logger) LogWarn(ctx context.Context, message string, options ...Option) {
+	options = append(options, Level(Warn))
+	l.Log(ctx, message, options...)
+}
+
+// LogInfo calls Log while appending Level(Info) as an option.
+func (l Logger) LogInfo(ctx context.Context, message string, options ...Option) {
+	options = append(options, Level(Info))
+	l.Log(ctx, message, options...)
+}
+
+// LogDebug calls Log while appending Level(Debug) as an option.
+func (l Logger) LogDebug(ctx context.Context, message string, options ...Option) {
+	options = append(options, Level(Debug))
+	l.Log(ctx, message, options...)
+}
+
+// LogTrace calls Log while appending Level(Trace) as an option.
+func (l Logger) LogTrace(ctx context.Context, message string, options ...Option) {
+	options = append(options, Level(Trace))
+	l.Log(ctx, message, options...)
+}
