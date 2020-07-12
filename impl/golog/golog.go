@@ -18,13 +18,17 @@ func Wrap(logger *log.Logger) logwrap.Impl {
 			fieldData = []byte("{}")
 		}
 
+		var logIt func(format string, v ...interface{})
+
 		switch message.Level {
 		case logwrap.Panic:
-			logger.Panicf("[%s] \"%s\" %s", message.Level.String(), message.Message, fieldData)
+			logIt = logger.Panicf
 		case logwrap.Fatal:
-			logger.Fatalf("[%s] \"%s\" %s", message.Level.String(), message.Message, fieldData)
+			logIt = logger.Fatalf
 		default:
-			logger.Printf("[%s] \"%s\" %s", message.Level.String(), message.Message, fieldData)
+			logIt = logger.Printf
 		}
+
+		logIt("[%s] \"%s\" %s", message.Level.String(), message.Message, fieldData)
 	}
 }
