@@ -41,11 +41,11 @@ const contextKeySegmentID = "_ShimmeringBeeLogSegmentID"
 //      }
 //  }
 //
-// This code would product log likes aproximately like:
+// This code would product log likes approximately like:
 // * [INFO] api submission {"segment": "start", "segmentID": 1}
-// * [INFO] perpare api submission {"segment": "start", "segmentID": 2, "parentSegmentId": 1}
+// * [INFO] prepare api submission {"segment": "start", "segmentID": 2, "parentSegmentId": 1}
 // * [INFO] preparation results {"segmentID": 2, "parentSegmentId": 1, "request": <request object>}
-// * [INFO] perpare api submission {"segment": "end", "segmentID": 2, "parentSegmentId": 1}
+// * [INFO] prepare api submission {"segment": "end", "segmentID": 2, "parentSegmentId": 1}
 // * [INFO] api submission {"segment": "end", "segmentID": 1}
 func (l Logger) Segment(pctx context.Context, message string, options ...Option) (context.Context, func()) {
 	if parentSegmentID, present := l.getSegmentIDFromContext(pctx); present {
