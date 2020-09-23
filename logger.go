@@ -2,6 +2,7 @@ package logwrap
 
 import (
 	"context"
+	"sync"
 	"sync/atomic"
 	"time"
 )
@@ -64,12 +65,8 @@ const (
 const contextKeyOptions = "_ShimmeringBeeLogOptions"
 const defaultLevel = Info
 
+var loggerSequenceOnce = &sync.Once{}
 var loggerSequence *uint64
-
-func init() {
-	var initialSequence uint64
-	loggerSequence = &initialSequence
-}
 
 // Logger is the representation of a stream of logs, it should always be instantiated with `New`.
 type Logger struct {
@@ -103,6 +100,12 @@ type Message struct {
 func New(i Impl) Logger {
 	var initialSequence uint64
 	var initialSegmentID uint64
+
+	loggerSequenceOnce.Do(func() {
+		var initialSequence uint64
+		loggerSequence = &initialSequence
+	})
+
 	return Logger{
 		impl:      i,
 		sequence:  &initialSequence,
