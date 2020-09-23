@@ -95,6 +95,8 @@ type Message struct {
 	Timestamp time.Time
 	// Sequence is a monotonic sequence number, used to determine log order with high frequency/low interval logs.
 	Sequence uint64
+	// Source is the name of the part of a system the message is emitted from
+	Source string
 }
 
 // New constructs a new logger, taking the backend implement which will actually log.
