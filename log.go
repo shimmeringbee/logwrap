@@ -12,7 +12,7 @@ func (l Logger) Log(ctx context.Context, message string, options ...Option) {
 	outgoingMessage := Message{
 		Level:     defaultLevel,
 		Message:   message,
-		Fields:    map[string]interface{}{},
+		Data:      map[string]interface{}{},
 		Timestamp: time.Now(),
 		Sequence:  atomic.AddUint64(l.sequence, 1),
 	}

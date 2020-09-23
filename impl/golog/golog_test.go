@@ -17,7 +17,7 @@ func TestWrap(t *testing.T) {
 
 		logger := logwrap.New(gologWrap)
 
-		logger.Log(context.Background(), "message with spaces", logwrap.Field("key", "value"))
+		logger.Log(context.Background(), "message with spaces", logwrap.Datum("key", "value"))
 
 		expectedMessage := "[INFO] \"message with spaces\" {\"key\":\"value\"}\n"
 		actualMessage := outputBuffer.String()

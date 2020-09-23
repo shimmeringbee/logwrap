@@ -19,6 +19,6 @@ func TestSequenceAsField(t *testing.T) {
 
 		capturedMessage := mockImpl.Calls[0].Arguments.Get(1).(Message)
 
-		assert.Equal(t, uint64(1), capturedMessage.Fields["sequence"])
+		assert.Equal(t, uint64(1), capturedMessage.Data["sequence"])
 	})
 }

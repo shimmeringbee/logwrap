@@ -9,7 +9,7 @@ import (
 // Wrap implements a logrus wrapper, allowing the output from logwrap to be sent to logrus.
 func Wrap(dest *realLogrus.Logger) logwrap.Impl {
 	return func(ctx context.Context, message logwrap.Message) {
-		dest.WithFields(message.Fields).WithTime(message.Timestamp).Log(mapLogLevels(message.Level), message.Message)
+		dest.WithFields(message.Data).WithTime(message.Timestamp).Log(mapLogLevels(message.Level), message.Message)
 	}
 }
 

@@ -89,8 +89,8 @@ type Message struct {
 	Level LogLevel
 	// Message is the human readable version of the message.
 	Message string
-	// Fields are a free form map of data to log, usually for structured logging.
-	Fields map[string]interface{}
+	// Data are a free form map of data to log, usually for structured logging.
+	Data map[string]interface{}
 	// Timestamp at which the log was made.
 	Timestamp time.Time
 	// Sequence is a monotonic sequence number, used to determine log order with high frequency/low interval logs.

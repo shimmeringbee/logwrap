@@ -32,7 +32,7 @@ const contextKeySegmentID = "_ShimmeringBeeLogSegmentID"
 //      //
 //      subCtx, subEnd := logger.Segment(ctx, "prepare api submission")
 //      request, err := // Prepare api submission
-//      logger.Log(subCtx, "preparation results", Field("request": request))
+//      logger.Log(subCtx, "preparation results", Datum("request": request))
 //      subEnd()
 //      //
 //      err := // Submit to api functional code
@@ -49,19 +49,19 @@ const contextKeySegmentID = "_ShimmeringBeeLogSegmentID"
 // * [INFO] api submission {"segment": "end", "segmentID": 1}
 func (l Logger) Segment(pctx context.Context, message string, options ...Option) (context.Context, func()) {
 	if parentSegmentID, present := l.getSegmentIDFromContext(pctx); present {
-		options = append(options, Field(ParentSegmentIDField, parentSegmentID))
+		options = append(options, Datum(ParentSegmentIDField, parentSegmentID))
 	}
 
 	segmentID := atomic.AddUint64(l.segmentID, 1)
-	options = append(options, Field(SegmentIDField, segmentID))
+	options = append(options, Datum(SegmentIDField, segmentID))
 
 	ctx := l.AddOptionsToContext(pctx, options...)
 	ctx = context.WithValue(ctx, l.contextKey(contextKeySegmentID), segmentID)
 
-	l.Log(ctx, message, Field(SegmentField, SegmentStartValue))
+	l.Log(ctx, message, Datum(SegmentField, SegmentStartValue))
 
 	return ctx, func() {
-		l.Log(ctx, message, Field(SegmentField, SegmentEndValue))
+		l.Log(ctx, message, Datum(SegmentField, SegmentEndValue))
 	}
 }
 

@@ -49,5 +49,5 @@ func SourceTrace(message *Message) {
 		}
 	}
 
-	message.Fields[SourceTraceField] = location
+	message.Data[SourceTraceField] = location
 }

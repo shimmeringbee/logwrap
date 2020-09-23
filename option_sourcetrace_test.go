@@ -28,7 +28,7 @@ func TestSourceTrace(t *testing.T) {
 		assert.True(t, mockImpl.AssertExpectations(t))
 		capturedMessage := mockImpl.Calls[0].Arguments.Get(1).(Message)
 
-		actualSourceLocation := capturedMessage.Fields[SourceTraceField].(SourceLocation)
+		actualSourceLocation := capturedMessage.Data[SourceTraceField].(SourceLocation)
 		assert.Equal(t, expectedLine, actualSourceLocation.Line)
 		assert.Equal(t, expectedFunction, actualSourceLocation.Function)
 		assert.True(t, strings.HasSuffix(actualSourceLocation.File, expectedFileSuffix))

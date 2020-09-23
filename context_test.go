@@ -40,7 +40,7 @@ func TestLogger_AddOptionsToContext(t *testing.T) {
 		logger := New(mockImpl.Impl)
 
 		ctx := logger.AddOptionsToContext(context.Background(), Level(Fatal))
-		cctx := logger.AddOptionsToContext(ctx, Field(expectedKey, expectedValue))
+		cctx := logger.AddOptionsToContext(ctx, Datum(expectedKey, expectedValue))
 		logger.Log(cctx, expectedMessage)
 
 		assert.True(t, mockImpl.AssertExpectations(t))
@@ -48,7 +48,7 @@ func TestLogger_AddOptionsToContext(t *testing.T) {
 		capturedMessage := mockImpl.Calls[0].Arguments.Get(1).(Message)
 		assert.Equal(t, expectedLevel, capturedMessage.Level)
 		assert.Equal(t, expectedMessage, capturedMessage.Message)
-		assert.Equal(t, expectedValue, capturedMessage.Fields[expectedKey])
+		assert.Equal(t, expectedValue, capturedMessage.Data[expectedKey])
 	})
 
 	t.Run("two separate loggers do not conflict within the same context", func(t *testing.T) {

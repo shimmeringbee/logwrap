@@ -40,12 +40,12 @@ func TestLogger_AddOptionsToLogger(t *testing.T) {
 		expectedValue := "value"
 
 		logger := New(mockImpl.Impl)
-		logger.AddOptionsToLogger(Field(expectedKey, expectedValue))
+		logger.AddOptionsToLogger(Datum(expectedKey, expectedValue))
 
 		logger.Log(context.Background(), "anything")
 		assert.True(t, mockImpl.AssertExpectations(t))
 
 		capturedMessage := mockImpl.Calls[0].Arguments.Get(1).(Message)
-		assert.Equal(t, expectedValue, capturedMessage.Fields[expectedKey])
+		assert.Equal(t, expectedValue, capturedMessage.Data[expectedKey])
 	})
 }

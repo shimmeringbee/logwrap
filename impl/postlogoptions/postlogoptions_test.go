@@ -24,14 +24,14 @@ func TestPostLogOptions(t *testing.T) {
 		expectedKey := "key"
 		expectedValue := "value"
 
-		postlog := PostLogOptions(mockImplOne.Impl, logwrap.Field(expectedKey, expectedValue))
+		postlog := PostLogOptions(mockImplOne.Impl, logwrap.Datum(expectedKey, expectedValue))
 
-		expectedMessage := logwrap.Message{Message: "message", Fields: map[string]interface{}{}}
+		expectedMessage := logwrap.Message{Message: "message", Data: map[string]interface{}{}}
 		postlog(context.Background(), expectedMessage)
 
 		capturedMessage := mockImplOne.Calls[0].Arguments.Get(1).(logwrap.Message)
 
 		assert.Equal(t, expectedMessage.Message, capturedMessage.Message)
-		assert.Equal(t, expectedValue, capturedMessage.Fields[expectedKey])
+		assert.Equal(t, expectedValue, capturedMessage.Data[expectedKey])
 	})
 }

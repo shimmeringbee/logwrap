@@ -13,9 +13,9 @@ import (
 // ignored.
 func Wrap(logger *log.Logger) logwrap.Impl {
 	return func(ctx context.Context, message logwrap.Message) {
-		fieldData, err := json.Marshal(message.Fields)
+		data, err := json.Marshal(message.Data)
 		if err != nil {
-			fieldData = []byte("{}")
+			data = []byte("{}")
 		}
 
 		var logIt func(format string, v ...interface{})
@@ -29,6 +29,6 @@ func Wrap(logger *log.Logger) logwrap.Impl {
 			logIt = logger.Printf
 		}
 
-		logIt("[%s] \"%s\" %s", message.Level.String(), message.Message, fieldData)
+		logIt("[%s] \"%s\" %s", message.Level.String(), message.Message, data)
 	}
 }

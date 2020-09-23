@@ -40,7 +40,7 @@ func TestWrap(t *testing.T) {
 		logrusWrap(context.Background(), logwrap.Message{
 			Level:     logwrap.Warn,
 			Message:   expectedMessage,
-			Fields:    map[string]interface{}{expectedKey: expectedValue},
+			Data:      map[string]interface{}{expectedKey: expectedValue},
 			Timestamp: expectedTime,
 			Sequence:  0,
 		})
