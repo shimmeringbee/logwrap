@@ -22,6 +22,6 @@ func TestErr(t *testing.T) {
 
 		capturedMessage := mockImpl.Calls[0].Arguments.Get(1).(Message)
 
-		assert.Equal(t, expectedErr, capturedMessage.Data["err"])
+		assert.Equal(t, expectedErr.Error(), capturedMessage.Data["err"])
 	})
 }
