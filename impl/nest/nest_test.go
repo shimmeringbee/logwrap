@@ -14,7 +14,7 @@ func TestWrap(t *testing.T) {
 		captImpl := capture.NewCapture()
 		logger := logwrap.New(captImpl.Impl())
 
-		wrapImpl := Wrap(&logger)
+		wrapImpl := Wrap(logger)
 
 		expectedLevel := logwrap.Warn
 		expectedMessage := "message"
