@@ -82,10 +82,17 @@ func (l Logger) Segment(pctx context.Context, message string, options ...Option)
 //      }
 //  }
 //
+//It is expected that errors in the returned function are actual problems, as it will log the error. It is not expected
+//that segments will be used where the error is unimportant.
 func (l Logger) SegmentFn(pctx context.Context, message string, options ...Option) func(func(ctx context.Context) error) error {
 	return func(f func(ctx context.Context) error) error {
 		c, done := l.Segment(pctx, message, options...)
+
 		err := f(c)
+		if err != nil {
+			l.Error(c, "segment errored", Err(err))
+		}
+
 		done()
 		return err
 	}
