@@ -65,6 +65,32 @@ func (l Logger) Segment(pctx context.Context, message string, options ...Option)
 	}
 }
 
+//SegmentFn works similar to Segment, but returns a function that takes a new function to be called. This can be used
+//to wrap calls with a Segment, removing the complexity of handling the end function of Segment. The function returned
+//passes the new child context into the wrapped function.
+//
+// For example, converting the Segment function example:
+//  func submitToAPI(pctx context.Context) {
+//      ctx, end := logger.Segment(pctx, "api submission")
+//      defer end()
+//      //
+//      if err := logger.SegmentFn(ctx, "prepare api submission")(func(subCtx context.Context) error {
+//          request, err := // Prepare api submission
+//          logger.Log(subCtx, "preparation results", Datum("request": request))
+//      }); err != nil {
+//           logger.Log(ctx, "failed to submit to api", Err(err))
+//      }
+//  }
+//
+func (l Logger) SegmentFn(pctx context.Context, message string, options ...Option) func(func(ctx context.Context) error) error {
+	return func(f func(ctx context.Context) error) error {
+		c, done := l.Segment(pctx, message, options...)
+		err := f(c)
+		done()
+		return err
+	}
+}
+
 func (l Logger) getSegmentIDFromContext(ctx context.Context) (uint64, bool) {
 	if uncast := ctx.Value(l.contextKey(contextKeySegmentID)); uncast != nil {
 		if segmentID, ok := uncast.(uint64); ok {
