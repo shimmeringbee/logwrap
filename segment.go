@@ -26,20 +26,21 @@ const contextKeySegmentID = "_ShimmeringBeeLogSegmentID"
 // can be nested and the `segmentID` and `parentSegmentId` fields can be used to reconstruct nested logs into a hierarchy.
 //
 // An expected use of Segment might be as follows:
-//  func submitToAPI(pctx context.Context) {
-//      ctx, end := logger.Segment(pctx, "api submission")
-//      defer end()
-//      //
-//      subCtx, subEnd := logger.Segment(ctx, "prepare api submission")
-//      request, err := // Prepare api submission
-//      logger.Log(subCtx, "preparation results", Datum("request": request))
-//      subEnd()
-//      //
-//      err := // Submit to api functional code
-//      if err != nil {
-//           logger.Log(ctx, "failed to submit to api", Err(err))
-//      }
-//  }
+//
+//	func submitToAPI(pctx context.Context) {
+//	    ctx, end := logger.Segment(pctx, "api submission")
+//	    defer end()
+//	    //
+//	    subCtx, subEnd := logger.Segment(ctx, "prepare api submission")
+//	    request, err := // Prepare api submission
+//	    logger.Log(subCtx, "preparation results", Datum("request": request))
+//	    subEnd()
+//	    //
+//	    err := // Submit to api functional code
+//	    if err != nil {
+//	         logger.Log(ctx, "failed to submit to api", Err(err))
+//	    }
+//	}
 //
 // This code would product log likes approximately like:
 // * [INFO] api submission {"segment": "start", "segmentID": 1}
@@ -65,25 +66,26 @@ func (l Logger) Segment(pctx context.Context, message string, options ...Option)
 	}
 }
 
-//SegmentFn works similar to Segment, but returns a function that takes a new function to be called. This can be used
-//to wrap calls with a Segment, removing the complexity of handling the end function of Segment. The function returned
-//passes the new child context into the wrapped function.
+// SegmentFn works similar to Segment, but returns a function that takes a new function to be called. This can be used
+// to wrap calls with a Segment, removing the complexity of handling the end function of Segment. The function returned
+// passes the new child context into the wrapped function.
 //
 // For example, converting the Segment function example:
-//  func submitToAPI(pctx context.Context) {
-//      ctx, end := logger.Segment(pctx, "api submission")
-//      defer end()
-//      //
-//      if err := logger.SegmentFn(ctx, "prepare api submission")(func(subCtx context.Context) error {
-//          request, err := // Prepare api submission
-//          logger.Log(subCtx, "preparation results", Datum("request": request))
-//      }); err != nil {
-//           logger.Log(ctx, "failed to submit to api", Err(err))
-//      }
-//  }
 //
-//It is expected that errors in the returned function are actual problems, as it will log the error. It is not expected
-//that segments will be used where the error is unimportant.
+//	func submitToAPI(pctx context.Context) {
+//	    ctx, end := logger.Segment(pctx, "api submission")
+//	    defer end()
+//	    //
+//	    if err := logger.SegmentFn(ctx, "prepare api submission")(func(subCtx context.Context) error {
+//	        request, err := // Prepare api submission
+//	        logger.Log(subCtx, "preparation results", Datum("request": request))
+//	    }); err != nil {
+//	         logger.Log(ctx, "failed to submit to api", Err(err))
+//	    }
+//	}
+//
+// It is expected that errors in the returned function are actual problems, as it will log the error. It is not expected
+// that segments will be used where the error is unimportant.
 func (l Logger) SegmentFn(pctx context.Context, message string, options ...Option) func(func(ctx context.Context) error) error {
 	return func(f func(ctx context.Context) error) error {
 		c, done := l.Segment(pctx, message, options...)
